@@ -208,8 +208,43 @@ curl -v https://netology.ru
 - image/jpeg – JPEG изображения;
 - audio/mpeg – mp3 аудио.
 
+Запуск сервера Nginx
+- Установка из репозитория: - apt-get install nginx
+- Конфигурация: - /etc/nginx/nginx.conf
+- Запуск | остановка | статус: - service nginx start | stop | status
+
+ss -t  / netstat -t - проверка tco портов 
+cat /etc/protocols - какие поротоклы бывают
+
 **HTTPS (HyperText Transfer Protocol Secure)** — расширение протокола HTTP, поддерживающее шифрование. Данные, передаваемые по протоколу HTTP, «упаковываются» в криптографический протокол SSL или TLS. В отличие от HTTP, для HTTPS по умолчанию используется TCP-порт 443.
 
+**Создание самоподписанного сертификата**
+
+сгенерировать новый сертификат
+ - openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 —
+перевести сертификат из pem в crt
+- openssl x509 - nodes -outform der -in cert.pem -out cert.crt -
+```
+user root;
+worker_processes auto;
+pid /run/nginx.pid;
+events {
+  worker_connections 1024;
+}
+http {
+  gzip on;
+  server {
+    listen 443 ssl;
+    ssl_certificate /etc/nginx/cert.crt;
+    ssl_certificate_key /etc/nginx/cert.key;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    location / {
+      proxy_pass https://google.com;
+    }
+  }
+}
+```
 **Server Name Indication (SNI)** — расширение компьютерного протокола TLS, которое позволяет клиентам сообщать имя хоста, с которым он желает соединиться во время процесса «рукопожатия». Это позволяет серверу иметь несколько сертификатов на одном IP-адресе и TCP- порту и предоставлять нужный в момент рукопожатия.
 
 HTTP2:
