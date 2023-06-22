@@ -220,10 +220,8 @@ cat /etc/protocols - какие поротоклы бывают
 
 **Создание самоподписанного сертификата**
 
-сгенерировать новый сертификат
- - openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 —
-перевести сертификат из pem в crt
-- openssl x509 - nodes -outform der -in cert.pem -out cert.crt -
+- openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 — сгенерировать новый сертификат
+- openssl x509 - nodes -outform der -in cert.pem -out cert.crt - перевести сертификат из pem в crt
 ```
 user root;
 worker_processes auto;
